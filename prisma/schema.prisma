@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id         Int     @id @default(autoincrement())
+  telegramId String  @map("telegram_id") @db.VarChar(16)
+  username   String
+  firstName  String  @map("first_name")
+  lastName   String  @map("last_name")
+  avatar     String?
+  point      Int     @default(100) @db.SmallInt()
+
+  createdRooms Room[] @relation("InviterUser")
+  wonRooms     Room[] @relation("WinnerUser")
+
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz()
+
+  userItems UserItem[]
+  userRooms UserRoom[]
+
+  @@map("account")
+}
+
+model Item {
+  id    Int     @id @default(autoincrement())
+  name  String  @db.VarChar(32)
+  image String  @db.Text
+  type  String  @db.VarChar(32)
+  price Decimal @db.Decimal()
+
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz()
+
+  userItems UserItem[]
+
+  @@map("item")
+}
+
+model UserItem {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+  itemId Int @map("item_id")
+
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz()
+
+  user Account @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item Item    @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@map("user_item")
+}
+
+model Room {
+  id          Int    @id @default(autoincrement())
+  code        String @db.VarChar(32)
+  hostId      Int?   @map("host_id")
+  winnerId    Int?   @map("winner_id")
+  status      Int?   @default(1) @db.SmallInt
+  waitingTime Int?   @default(5) @map("waiting_time")
+
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz()
+
+  host      Account?   @relation("InviterUser", fields: [hostId], references: [id])
+  winner    Account?   @relation("WinnerUser", fields: [winnerId], references: [id])
+  userRooms UserRoom[]
+
+  @@map("room")
+}
+
+model UserRoom {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+  roomId Int @map("room_id")
+
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz()
+
+  user Account @relation(fields: [userId], references: [id])
+  room Room    @relation(fields: [roomId], references: [id])
+
+  @@map("user_room")
+}
+
+// npx prisma migrate dev --name init
+// npx prisma migrate reset
+// npx prisma migrate deploy

@@ -1,0 +1,71 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@provider/*": [
+        "src/providers/*"
+      ],
+      "@model/*": [
+        "src/models/*"
+      ],
+      "@seeder/*": [
+        "src/database/seeders/*"
+      ],
+      "@factory/*": [
+        "src/database/factories/*"
+      ],
+      "@exception/*": [
+        "src/common/exceptions/*"
+      ],
+      "@pipe/*": [
+        "src/common/pipes/*"
+      ],
+      "@interceptor/*": [
+        "src/common/interceptors/*"
+      ],
+      "@decorator/*": [
+        "src/common/decorators/*"
+      ],
+      "@guard/*": [
+        "src/common/guards/*"
+      ],
+      "@middleware/*": [
+        "src/common/middlewares/*"
+      ],
+      "@enum/*": [
+        "src/common/enums/*"
+      ],
+      "@type/*": [
+        "src/common/types/*"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ],
+      "@job/*": [
+        "src/jobs/*"
+      ],
+      "@service/*": [
+        "src/services/*"
+      ],
+      "@prisma/*": [
+        "src/prisma/*"
+      ]
+    }
+  }
+}
